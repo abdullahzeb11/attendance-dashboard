@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: light;
-}
-
 html, body, #root {
   height: 100%;
 }
@@ -16,6 +12,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f7f8fb;
   color: #0f172a;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #020617;
+  color: #e2e8f0;
 }
 
 /* Subtle scrollbar */
@@ -23,6 +29,9 @@ body {
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 ::-webkit-scrollbar-track { background: transparent; }
+
+html.dark ::-webkit-scrollbar-thumb { background: #334155; }
+html.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
 @keyframes slideIn {
   from { transform: translateY(-8px); opacity: 0; }
@@ -47,3 +56,92 @@ body {
   padding: 10px 12px !important;
   font-size: 12px !important;
 }
+
+/* =====================================================
+   Dark mode — global retargeting of Tailwind utilities.
+   Lets the app render in dark without touching every
+   component's className list.
+   ===================================================== */
+
+/* Page + card surfaces */
+html.dark .bg-white { background-color: #0f172a !important; }
+html.dark .bg-white\/80 { background-color: rgba(15,23,42,.82) !important; }
+html.dark .bg-white\/85 { background-color: rgba(15,23,42,.85) !important; }
+html.dark .bg-\[\#f7f8fb\] { background-color: #020617 !important; }
+
+/* Slate fills */
+html.dark .bg-slate-50 { background-color: rgba(30,41,59,.45) !important; }
+html.dark .bg-slate-50\/30 { background-color: rgba(30,41,59,.25) !important; }
+html.dark .bg-slate-50\/40 { background-color: rgba(30,41,59,.3) !important; }
+html.dark .bg-slate-50\/50 { background-color: rgba(30,41,59,.4) !important; }
+html.dark .bg-slate-50\/60 { background-color: rgba(30,41,59,.5) !important; }
+html.dark .bg-slate-100 { background-color: #1e293b !important; }
+html.dark .bg-slate-100\/50 { background-color: rgba(30,41,59,.6) !important; }
+
+/* Borders + dividers + rings */
+html.dark .border-slate-100 { border-color: #1e293b !important; }
+html.dark .border-slate-200 { border-color: #334155 !important; }
+html.dark .border-slate-300 { border-color: #475569 !important; }
+html.dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]) { border-color: #1e293b !important; }
+html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: #1e293b !important; }
+html.dark .ring-slate-200 { --tw-ring-color: #334155 !important; }
+
+/* Text */
+html.dark .text-slate-900 { color: #f1f5f9 !important; }
+html.dark .text-slate-800 { color: #e2e8f0 !important; }
+html.dark .text-slate-700 { color: #cbd5e1 !important; }
+html.dark .text-slate-600 { color: #cbd5e1 !important; }
+html.dark .text-slate-500 { color: #94a3b8 !important; }
+html.dark .text-slate-400 { color: #64748b !important; }
+
+/* Placeholders */
+html.dark .placeholder\:text-slate-400::placeholder { color: #475569 !important; }
+
+/* Hovers */
+html.dark .hover\:bg-slate-50:hover { background-color: rgba(30,41,59,.6) !important; }
+html.dark .hover\:bg-slate-100:hover { background-color: #1e293b !important; }
+html.dark .hover\:bg-slate-50\/60:hover { background-color: rgba(30,41,59,.5) !important; }
+html.dark .hover\:bg-white:hover { background-color: #1e293b !important; }
+html.dark .focus\:bg-white:focus { background-color: #0f172a !important; }
+
+/* Brand / accent tinted backgrounds — pulled toward dark */
+html.dark .bg-brand-50 { background-color: rgba(59,108,243,.18) !important; }
+html.dark .bg-brand-50\/30 { background-color: rgba(59,108,243,.12) !important; }
+html.dark .bg-brand-100 { background-color: rgba(59,108,243,.28) !important; }
+html.dark .bg-emerald-50 { background-color: rgba(16,185,129,.15) !important; }
+html.dark .bg-amber-50 { background-color: rgba(245,158,11,.15) !important; }
+html.dark .bg-rose-50 { background-color: rgba(239,68,68,.15) !important; }
+html.dark .bg-violet-50 { background-color: rgba(139,92,246,.15) !important; }
+
+/* Sidebar upgrade gradient */
+html.dark .from-brand-50 {
+  --tw-gradient-from: rgba(59,108,243,.18) var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgba(59,108,243,0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+html.dark .to-white { --tw-gradient-to: #0f172a var(--tw-gradient-to-position) !important; }
+
+/* Status badge rings */
+html.dark .ring-emerald-200 { --tw-ring-color: rgba(16,185,129,.4) !important; }
+html.dark .ring-amber-200 { --tw-ring-color: rgba(245,158,11,.4) !important; }
+html.dark .ring-rose-200 { --tw-ring-color: rgba(239,68,68,.4) !important; }
+html.dark .ring-brand-100 { --tw-ring-color: rgba(59,108,243,.35) !important; }
+
+/* Recharts */
+html.dark .recharts-text { fill: #94a3b8 !important; }
+html.dark .recharts-cartesian-grid line { stroke: #1e293b !important; }
+html.dark .recharts-default-tooltip {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+html.dark .recharts-tooltip-item,
+html.dark .recharts-tooltip-label { color: #e2e8f0 !important; }
+
+/* Inline ".input" styles (used in AddEmployee + Settings modals) */
+html.dark .input {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+html.dark .input::placeholder { color: #64748b !important; }

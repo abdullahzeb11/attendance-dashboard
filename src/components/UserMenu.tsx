@@ -1,4 +1,4 @@
-import { User, Settings, LifeBuoy, Moon, LogOut } from 'lucide-react'
+import { User, Settings, LifeBuoy, LogOut } from 'lucide-react'
 import { useClickOutside } from '../hooks/useClickOutside'
 
 type Props = {
@@ -8,10 +8,9 @@ type Props = {
   onSettings: () => void
   onHelp: () => void
   onSignOut: () => void
-  onToggleTheme: () => void
 }
 
-export default function UserMenu({ open, onClose, onProfile, onSettings, onHelp, onSignOut, onToggleTheme }: Props) {
+export default function UserMenu({ open, onClose, onProfile, onSettings, onHelp, onSignOut }: Props) {
   const ref = useClickOutside<HTMLDivElement>(onClose, open)
   if (!open) return null
   return (
@@ -31,7 +30,6 @@ export default function UserMenu({ open, onClose, onProfile, onSettings, onHelp,
       <ul className="py-1">
         <Item icon={User} label="My profile" onClick={() => { onProfile(); onClose() }} />
         <Item icon={Settings} label="Account settings" onClick={() => { onSettings(); onClose() }} />
-        <Item icon={Moon} label="Toggle theme" onClick={() => { onToggleTheme(); onClose() }} />
         <Item icon={LifeBuoy} label="Help & docs" onClick={() => { onHelp(); onClose() }} />
       </ul>
       <div className="border-t border-slate-100 py-1">

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Users, UserCheck, Clock3, UserX, Plane } from 'lucide-react'
 import Sidebar, { type Page } from './components/Sidebar'
 import Topbar from './components/Topbar'
+import { type Theme } from './components/ThemeSwitcher'
 import KPICard from './components/KPICard'
 import AttendanceTrendChart from './components/AttendanceTrendChart'
 import DepartmentChart from './components/DepartmentChart'
@@ -40,7 +41,11 @@ function makeAvatar(name: string, color: string) {
 
 export default function App() {
   const [page, setPage] = useState<Page>('dashboard')
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === 'undefined') return 'system'
+    const saved = window.localStorage.getItem('theme')
+    return saved === 'light' || saved === 'dark' || saved === 'system' ? saved : 'system'
+  })
 
   const [employeeList, setEmployeeList] = useState<Employee[]>(initialEmployees)
 
@@ -68,8 +73,26 @@ export default function App() {
   const dismiss = (id: number) => setToasts((prev) => prev.filter((t) => t.id !== id))
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
+    const root = document.documentElement
+    const apply = (t: Theme) => {
+      const isDark =
+        t === 'dark' ||
+        (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      root.classList.toggle('dark', isDark)
+    }
+    apply(theme)
+    window.localStorage.setItem('theme', theme)
+    if (theme !== 'system') return
+    const mql = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = () => apply('system')
+    mql.addEventListener('change', handler)
+    return () => mql.removeEventListener('change', handler)
   }, [theme])
+
+  const changeTheme = (t: Theme) => {
+    setTheme(t)
+    notify(`Theme: ${t}`, { variant: 'info' })
+  }
 
   const effectiveQuery = (query || topQuery).trim().toLowerCase()
   const filtered = useMemo(() => {
@@ -163,10 +186,8 @@ export default function App() {
           onSettings={() => setPage('settings')}
           onHelp={() => setHelpOpen(true)}
           onSignOut={() => setSignOutOpen(true)}
-          onToggleTheme={() => {
-            setTheme((t) => (t === 'light' ? 'dark' : 'light'))
-            notify('Theme updated', { variant: 'info' })
-          }}
+          theme={theme}
+          onThemeChange={changeTheme}
           onNotify={(title) => notify(title, { variant: 'info' })}
         />
 
@@ -254,10 +275,7 @@ export default function App() {
               <SettingsPage
                 onSave={() => notify('Settings saved', { variant: 'success' })}
                 theme={theme}
-                onToggleTheme={() => {
-                  setTheme((t) => (t === 'light' ? 'dark' : 'light'))
-                  notify('Theme updated', { variant: 'info' })
-                }}
+                onThemeChange={changeTheme}
               />
             </PageShell>
           )}

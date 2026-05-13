@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import ThemeSwitcher, { type Theme } from './ThemeSwitcher'
 
-type Props = { onSave: () => void; theme: 'light' | 'dark'; onToggleTheme: () => void }
+type Props = { onSave: () => void; theme: Theme; onThemeChange: (t: Theme) => void }
 
-export default function SettingsPage({ onSave, theme, onToggleTheme }: Props) {
+export default function SettingsPage({ onSave, theme, onThemeChange }: Props) {
   const [orgName, setOrgName] = useState('Acme Co.')
   const [timezone, setTimezone] = useState('Asia/Riyadh')
   const [workStart, setWorkStart] = useState('09:00')
@@ -28,12 +29,10 @@ export default function SettingsPage({ onSave, theme, onToggleTheme }: Props) {
           </select>
         </Field>
         <Field label="Theme">
-          <button
-            onClick={onToggleTheme}
-            className="px-3 py-2 text-sm rounded-lg border border-slate-200 hover:bg-slate-50"
-          >
-            Switch to {theme === 'light' ? 'dark' : 'light'} mode
-          </button>
+          <div className="flex items-center gap-3">
+            <ThemeSwitcher theme={theme} onChange={onThemeChange} />
+            <span className="text-xs text-slate-500 capitalize">{theme}</span>
+          </div>
         </Field>
       </Section>
 

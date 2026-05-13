@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Bell, Search, Plus, ChevronDown } from 'lucide-react'
 import NotificationsPanel from './NotificationsPanel'
 import UserMenu from './UserMenu'
+import ThemeSwitcher, { type Theme } from './ThemeSwitcher'
 
 type Props = {
   search: string
@@ -11,7 +12,8 @@ type Props = {
   onSettings: () => void
   onHelp: () => void
   onSignOut: () => void
-  onToggleTheme: () => void
+  theme: Theme
+  onThemeChange: (t: Theme) => void
   onNotify: (title: string) => void
 }
 
@@ -20,7 +22,7 @@ export default function Topbar(props: Props) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-slate-200 bg-white/85 backdrop-blur px-4 lg:px-8">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 lg:gap-4 border-b border-slate-200 bg-white/85 backdrop-blur px-4 lg:px-8">
       <div className="flex-1 max-w-md">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -35,6 +37,8 @@ export default function Topbar(props: Props) {
       </div>
 
       <div className="flex items-center gap-2 lg:gap-3">
+        <ThemeSwitcher theme={props.theme} onChange={props.onThemeChange} />
+
         <button
           onClick={props.onNewEntry}
           className="hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium px-3 py-2 transition-colors"
@@ -89,7 +93,6 @@ export default function Topbar(props: Props) {
             onSettings={props.onSettings}
             onHelp={props.onHelp}
             onSignOut={props.onSignOut}
-            onToggleTheme={props.onToggleTheme}
           />
         </div>
       </div>
