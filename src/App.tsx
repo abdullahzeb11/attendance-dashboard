@@ -89,10 +89,7 @@ export default function App() {
     return () => mql.removeEventListener('change', handler)
   }, [theme])
 
-  const changeTheme = (t: Theme) => {
-    setTheme(t)
-    notify(`Theme: ${t}`, { variant: 'info' })
-  }
+  const changeTheme = (t: Theme) => setTheme(t)
 
   const effectiveQuery = (query || topQuery).trim().toLowerCase()
   const filtered = useMemo(() => {
@@ -119,11 +116,7 @@ export default function App() {
     }
   }, [employeeList])
 
-  // Handlers
-  const handleNavigate = (p: Page) => {
-    setPage(p)
-    notify(`Switched to ${pageTitle(p)}`, { variant: 'info' })
-  }
+  const handleNavigate = (p: Page) => setPage(p)
 
   const handleAddEmployee = (data: {
     name: string
@@ -207,10 +200,7 @@ export default function App() {
               onExport={handleExport}
               onAdd={() => setAddOpen(true)}
               onView={(e) => setDrawerEmp(e)}
-              onEdit={(e) => {
-                setDrawerEmp(null)
-                notify('Edit form opened', { description: e.name, variant: 'info' })
-              }}
+              onEdit={() => setDrawerEmp(null)}
               onMessage={handleMessage}
               onMarkAbsent={(e) => setConfirmAbsent(e)}
               onViewFullReport={() => handleNavigate('reports')}
@@ -236,7 +226,7 @@ export default function App() {
                 rows={filtered}
                 onAdd={() => setAddOpen(true)}
                 onView={(e) => setDrawerEmp(e)}
-                onEdit={(e) => notify('Edit form opened', { description: e.name })}
+                onEdit={() => {}}
                 onMessage={handleMessage}
                 onMarkAbsent={(e) => setConfirmAbsent(e)}
               />
@@ -262,10 +252,7 @@ export default function App() {
 
           {page === 'reports' && (
             <PageShell title="Reports" subtitle="Monthly performance, attendance, and time-off summaries.">
-              <MonthlyReport
-                onViewFullReport={() => notify('Full report opened', { variant: 'info' })}
-                onRangeChange={(r) => notify(`Range set: ${r}`, { variant: 'info' })}
-              />
+              <MonthlyReport />
               <PunctualityChart />
             </PageShell>
           )}
@@ -354,18 +341,12 @@ export default function App() {
       <EmployeeDrawer
         employee={drawerEmp}
         onClose={() => setDrawerEmp(null)}
-        onEdit={(e) => {
-          setDrawerEmp(null)
-          notify('Edit form opened', { description: e.name })
-        }}
+        onEdit={() => setDrawerEmp(null)}
       />
     </div>
   )
 }
 
-function pageTitle(p: Page) {
-  return { dashboard: 'Dashboard', employees: 'Employees', attendance: 'Attendance', reports: 'Reports', settings: 'Settings' }[p]
-}
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
